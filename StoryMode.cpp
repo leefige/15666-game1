@@ -110,13 +110,13 @@ void StoryMode::enter_scene() {
 	glm::vec2 at(3.0f, view_max.y - 3.0f);
 	auto add_text = [&items,&at](Sprite const *text) {
 		assert(text);
-		items.emplace_back("TEST TEXT", nullptr, 1.0f, nullptr, at);
+		items.emplace_back("TEST TEXT", text, 1.0f, nullptr, at);
 		at.y -= text->max_px.y - text->min_px.y;
 		at.y -= 4.0f;
 	};
 	auto add_choice = [&items,&at](Sprite const *text, std::function< void(MenuMode::Item const &) > const &fn) {
 		assert(text);
-		items.emplace_back("TEST CHOICE", nullptr, 1.0f, fn, at + glm::vec2(8.0f, 0.0f));
+		items.emplace_back("TEST CHOICE", text, 1.0f, fn, at + glm::vec2(8.0f, 0.0f));
 		at.y -= text->max_px.y - text->min_px.y;
 		at.y -= 4.0f;
 	};
@@ -135,20 +135,20 @@ void StoryMode::enter_scene() {
 		at.y -= 8.0f; //gap before choices
 		add_choice(text_dunes_do_walk_west, [this](MenuMode::Item const &){
 			location = Hill;
-			Mode::current = shared_from_this();
+			Mode::set_current(shared_from_this());
 		});
 		add_choice(text_dunes_do_walk_east, [this](MenuMode::Item const &){
 			location = Oasis;
-			Mode::current = shared_from_this();
+			Mode::set_current(shared_from_this());
 		});
 		if (!dunes.first_visit) {
 			add_choice(text_dunes_do_leave, [this](MenuMode::Item const &){
 				if (added_stone) {
 					//TODO: some sort of victory animation?
-					Mode::current = nullptr;
+					Mode::set_current(nullptr);
 				} else {
 					dunes.wont_leave = true;
-					Mode::current = shared_from_this();
+					Mode::set_current(shared_from_this());
 				}
 			});
 		}
@@ -171,12 +171,12 @@ void StoryMode::enter_scene() {
 			add_choice(text_oasis_do_take_stone, [this](MenuMode::Item const &){
 				have_stone = true;
 				oasis.took_stone = true;
-				Mode::current = shared_from_this();
+				Mode::set_current(shared_from_this());
 			});
 		}
 		add_choice(text_oasis_do_return, [this](MenuMode::Item const &){
 			location = Dunes;
-			Mode::current = shared_from_this();
+			Mode::set_current(shared_from_this());
 		});
 	} else if (location == Hill) {
 		if (hill.added_stone) {
@@ -198,12 +198,12 @@ void StoryMode::enter_scene() {
 			add_choice(text_hill_do_add_stone, [this](MenuMode::Item const &){
 				added_stone = true;
 				hill.added_stone = true;
-				Mode::current = shared_from_this();
+				Mode::set_current(shared_from_this());
 			});
 		}
 		add_choice(text_hill_do_return, [this](MenuMode::Item const &){
 			location = Dunes;
-			Mode::current = shared_from_this();
+			Mode::set_current(shared_from_this());
 		});
 	}
 	std::shared_ptr< MenuMode > menu = std::make_shared< MenuMode >(items);
@@ -213,7 +213,7 @@ void StoryMode::enter_scene() {
 	menu->view_min = view_min;
 	menu->view_max = view_max;
 	menu->background = shared_from_this();
-	Mode::current = menu;
+	Mode::set_current(menu);
 }
 
 void StoryMode::draw(glm::uvec2 const &drawable_size) {
