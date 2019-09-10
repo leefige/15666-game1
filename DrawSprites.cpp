@@ -141,16 +141,27 @@ void DrawSprites::draw(Sprite const &sprite, glm::vec2 const &center, float scal
 
 }
 
-void DrawSprites::draw_text(std::string const &name, glm::vec2 const &anchor, float scale, glm::u8vec4 const &color) {
-	glm::vec2 moving_anchor = anchor;
+void DrawSprites::draw_text(std::string const &name, glm::vec2 const &at, float scale, glm::u8vec4 const &color) {
+	glm::vec2 moving_at = at;
 	for (size_t pos = 0; pos < name.size(); pos++){
 		Sprite const &chr = atlas.lookup(name.substr(pos,1));
-		draw(chr, moving_anchor, scale, color);
-		moving_anchor.x += (chr.max_px.x - chr.min_px.x) * scale;
+		draw(chr, moving_at, scale, color);
+		moving_at.x += (chr.max_px.x - chr.anchor_px.x) * scale;
 	}
 }
 
-void DrawSprites::get_text_extents(std::string const &name, glm::vec2 const &anchor, float scale, glm::vec2 *min, glm::vec2 *max) {
+void DrawSprites::get_text_extents(std::string const &name, glm::vec2 const &at, float scale, glm::vec2 *min, glm::vec2 *max) {
+	Sprite const &first_chr = atlas.lookup(name.substr(0,1));
+	*min = at + scale * (first_chr.min_px - first_chr.anchor_px);
+
+	glm::vec2 right_most(0.0, 0.0);
+	for (size_t pos = 0; pos < name.size(); pos++){
+		Sprite const &chr = atlas.lookup(name.substr(pos,1));
+		glm::vec2 &&tmp = chr.max_px - chr.anchor_px;
+		right_most.x += tmp.x;
+		right_most.y = tmp.y > right_most.y ? tmp.y : right_most.y;
+	}
+	*max = at + scale * right_most;
 }
 
 DrawSprites::~DrawSprites() {

@@ -82,6 +82,7 @@ SpriteAtlas::SpriteAtlas(std::string const &filebase) {
 		sprite.min_px = data.min_px;
 		sprite.max_px = data.max_px;
 		sprite.anchor_px = data.anchor_px;
+		sprite.name = name;
 
 		//finally, insert into the sprites lookup table:
 		auto ret = sprites.insert(std::make_pair(name, sprite));

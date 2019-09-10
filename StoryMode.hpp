@@ -40,4 +40,7 @@ struct StoryMode : Mode {
 	
 	glm::vec2 view_min = glm::vec2(0,0);
 	glm::vec2 view_max = glm::vec2(256, 224);
+
+	float text_height = 11;
+	float choice_height = text_height;
 };

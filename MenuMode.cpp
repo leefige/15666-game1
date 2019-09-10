@@ -65,6 +65,12 @@ void MenuMode::update(float elapsed) {
 	}
 }
 
+//---------------
+std::ostream& operator<<(std::ostream &o, const glm::vec2 &v) {
+	return o << "(" << v.x << "," << v.y << ")"; 
+}
+// -------------
+
 void MenuMode::draw(glm::uvec2 const &drawable_size) {
 	if (background) {
 		std::shared_ptr< Mode > hold_me = shared_from_this();
@@ -101,11 +107,13 @@ void MenuMode::draw(glm::uvec2 const &drawable_size) {
 				);
 				left = min.x;
 				right = max.x;
+				std::cout << item.name << ":" << min << max << item.at << std::endl;
 			} else {
 				draw_sprites.draw(*item.sprite, item.at, item.scale, color);
 				left = item.at.x + item.scale * (item.sprite->min_px.x - item.sprite->anchor_px.x);
 				right = item.at.x + item.scale * (item.sprite->max_px.x - item.sprite->anchor_px.x);
 			}
+
 			if (is_selected) {
 				if (left_select) {
 					draw_sprites.draw(*left_select, glm::vec2(left, item.at.y), item.scale);

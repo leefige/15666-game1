@@ -108,41 +108,39 @@ void StoryMode::enter_scene() {
 	//just entered this scene, adjust flags and build menu as appropriate:
 	std::vector< MenuMode::Item > items;
 	glm::vec2 at(3.0f, view_max.y - 3.0f);
-	auto add_text = [&items,&at](Sprite const *text) {
-		assert(text);
-		items.emplace_back("TEST TEXT", text, 1.0f, nullptr, at);
-		at.y -= text->max_px.y - text->min_px.y;
+	auto add_text = [&items,&at,this](std::string const &text) {
+		at.y -= text_height;
+		items.emplace_back(text, nullptr, 1.0f, nullptr, at);
 		at.y -= 4.0f;
 	};
-	auto add_choice = [&items,&at](Sprite const *text, std::function< void(MenuMode::Item const &) > const &fn) {
-		assert(text);
-		items.emplace_back("TEST CHOICE", text, 1.0f, fn, at + glm::vec2(8.0f, 0.0f));
-		at.y -= text->max_px.y - text->min_px.y;
+	auto add_choice = [&items,&at,this](std::string const &text, std::function< void(MenuMode::Item const &) > const &fn) {
+		at.y -= choice_height;
+		items.emplace_back(text, nullptr, 1.0f, fn, at + glm::vec2(8.0f, 0.0f));
 		at.y -= 4.0f;
 	};
 
 	if (location == Dunes) {
 		if (dunes.wont_leave) {
 			dunes.wont_leave = false;
-			add_text(text_dunes_wont_leave);
+			add_text(text_dunes_wont_leave->name);
 		}
 		if (dunes.first_visit) {
 			dunes.first_visit = false;
-			add_text(text_dunes_landing);
+			add_text(text_dunes_landing->name);
 		} else {
-			add_text(text_dunes_return);
+			add_text(text_dunes_return->name);
 		}
 		at.y -= 8.0f; //gap before choices
-		add_choice(text_dunes_do_walk_west, [this](MenuMode::Item const &){
+		add_choice(text_dunes_do_walk_west->name, [this](MenuMode::Item const &){
 			location = Hill;
 			Mode::set_current(shared_from_this());
 		});
-		add_choice(text_dunes_do_walk_east, [this](MenuMode::Item const &){
+		add_choice(text_dunes_do_walk_east->name, [this](MenuMode::Item const &){
 			location = Oasis;
 			Mode::set_current(shared_from_this());
 		});
 		if (!dunes.first_visit) {
-			add_choice(text_dunes_do_leave, [this](MenuMode::Item const &){
+			add_choice(text_dunes_do_leave->name, [this](MenuMode::Item const &){
 				if (added_stone) {
 					//TODO: some sort of victory animation?
 					Mode::set_current(nullptr);
@@ -155,53 +153,53 @@ void StoryMode::enter_scene() {
 	} else if (location == Oasis) {
 		if (oasis.took_stone) {
 			oasis.took_stone = false;
-			add_text(text_oasis_stone_taken);
+			add_text(text_oasis_stone_taken->name);
 		}
 		if (oasis.first_visit) {
 			oasis.first_visit = false;
-			add_text(text_oasis_intro);
+			add_text(text_oasis_intro->name);
 		} else {
-			add_text(text_oasis_plain);
+			add_text(text_oasis_plain->name);
 		}
 		if (!have_stone) {
-			add_text(text_oasis_stone);
+			add_text(text_oasis_stone->name);
 		}
 		at.y -= 8.0f; //gap before choices
 		if (!have_stone) {
-			add_choice(text_oasis_do_take_stone, [this](MenuMode::Item const &){
+			add_choice(text_oasis_do_take_stone->name, [this](MenuMode::Item const &){
 				have_stone = true;
 				oasis.took_stone = true;
 				Mode::set_current(shared_from_this());
 			});
 		}
-		add_choice(text_oasis_do_return, [this](MenuMode::Item const &){
+		add_choice(text_oasis_do_return->name, [this](MenuMode::Item const &){
 			location = Dunes;
 			Mode::set_current(shared_from_this());
 		});
 	} else if (location == Hill) {
 		if (hill.added_stone) {
 			hill.added_stone = false;
-			add_text(text_hill_stone_added);
+			add_text(text_hill_stone_added->name);
 		}
 		if (hill.first_visit) {
 			hill.first_visit = false;
-			add_text(text_hill_intro);
+			add_text(text_hill_intro->name);
 		} else {
 			if (added_stone) {
-				add_text(text_hill_active);
+				add_text(text_hill_active->name);
 			} else {
-				add_text(text_hill_inactive);
+				add_text(text_hill_inactive->name);
 			}
 		}
 		at.y -= 8.0f; //gap before choices
 		if (have_stone && !added_stone) {
-			add_choice(text_hill_do_add_stone, [this](MenuMode::Item const &){
+			add_choice(text_hill_do_add_stone->name, [this](MenuMode::Item const &){
 				added_stone = true;
 				hill.added_stone = true;
 				Mode::set_current(shared_from_this());
 			});
 		}
-		add_choice(text_hill_do_return, [this](MenuMode::Item const &){
+		add_choice(text_hill_do_return->name, [this](MenuMode::Item const &){
 			location = Dunes;
 			Mode::set_current(shared_from_this());
 		});
