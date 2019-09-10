@@ -24,7 +24,7 @@ Sprite const *sprite_hill_before = nullptr;
 Sprite const *sprite_hill_after = nullptr;
 
 const std::string text_dunes_landing = 
-	"My name is Tom. You may Call me\n"
+	"My name is Tom. You may call me\n"
 	"Major Tom. I lost contact with\n"
 	"Ground Control. But Somehow I \n"
 	"landed on the dark side of the Moon.\n"
