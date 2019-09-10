@@ -1,12 +1,15 @@
-the-planet.xcf?dunes 0 0 256 224 0 0 dunes-bg
+the-planet.xcf?dunes&earth 0 0 256 224 0 0 dunes-bg
 "the-planet.xcf?traveller dunes&traveller shadow dunes" 179 190 +15 +24 0 0 dunes-traveller
 "the-planet.xcf?ship&shadow&ramp" 83 57 +88 +155 0 0 dunes-ship
-the-planet.xcf?grass&shadows&water-shine&water&oasis 0 0 256 224 0 0 oasis-bg
+the-planet.xcf?grass&shadows&water-shine&water&oasis&lamp&lampshadow 0 0 256 224 0 0 oasis-bg
+the-planet.xcf?grass&shadows&water-shine&water&oasis&lamp&lampshadow&man 0 0 256 224 0 0 oasis-bg-man
 "the-planet.xcf?traveller oasis&traveller shadow oasis" 43 190 +15 +24 0 0 oasis-traveller
 "the-planet.xcf?oasis missing&oasis missing shadow" 183 196 +3 +5 0 0 oasis-missing
-"the-planet.xcf?stones&stones shadow&depression&hill" 0 0 256 224 0 0 hill-bg
+"the-planet.xcf?depression&hill&reflect" 0 0 256 224 0 0 hill-bg
 "the-planet.xcf?traveller hill&traveller shadow hill" 112 89 +17 +25 0 0 hill-traveller
 "the-planet.xcf?missing&missing shadow" 83 104 +3 +5 0 0 hill-missing
+"the-planet.xcf?turned&shine" 42 32 +147 +72 0 0 hill-after
+"the-planet.xcf?rock" 55 33 +46 +77 0 0 hill-before
 "the-planet.xcf?hill text" 0 6 +256 +50 0 +0 hill-text-intro
 "the-planet.xcf?hill text" 3 114 +239 +12 0 +0 hill-text-inactive
 "the-planet.xcf?hill text" 3 138 +221 +12 0 +0 hill-text-active
