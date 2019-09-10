@@ -66,9 +66,7 @@ void MenuMode::update(float elapsed) {
 }
 
 //---------------
-std::ostream& operator<<(std::ostream &o, const glm::vec2 &v) {
-	return o << "(" << v.x << "," << v.y << ")"; 
-}
+extern std::ostream& operator<<(std::ostream &o, const glm::vec2 &v);
 // -------------
 
 void MenuMode::draw(glm::uvec2 const &drawable_size) {
@@ -94,7 +92,7 @@ void MenuMode::draw(glm::uvec2 const &drawable_size) {
 
 		for (auto const &item : items) {
 			bool is_selected = (&item == &items[0] + selected);
-			glm::u8vec4 color = (is_selected ? glm::u8vec4(0xff, 0x00, 0xff, 0xff) : glm::u8vec4(0xff, 0xff, 0xff, 0xff));
+			glm::u8vec4 color = (is_selected ? glm::u8vec4(0xff, 0x00, 0xff, 0xff) : glm::u8vec4(0x77, 0x77, 0x77, 0xff));
 			float left, right;
 			if (!item.sprite) {
 				//draw item.name as text:
@@ -107,7 +105,7 @@ void MenuMode::draw(glm::uvec2 const &drawable_size) {
 				);
 				left = min.x;
 				right = max.x;
-				std::cout << item.name << ":" << min << max << item.at << std::endl;
+				// std::cout << item.name << ":" << min << max << item.at << std::endl;
 			} else {
 				draw_sprites.draw(*item.sprite, item.at, item.scale, color);
 				left = item.at.x + item.scale * (item.sprite->min_px.x - item.sprite->anchor_px.x);

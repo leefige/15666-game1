@@ -119,6 +119,12 @@ DrawSprites::DrawSprites(
 	//DEBUG: std::cout << glm::to_string(to_clip) << std::endl;
 }
 
+//---------------
+std::ostream& operator<<(std::ostream &o, const glm::vec2 &v) {
+	return o << "(" << v.x << "," << v.y << ")"; 
+}
+// -------------
+
 void DrawSprites::draw(Sprite const &sprite, glm::vec2 const &center, float scale, glm::u8vec4 const &tint) {
 	glm::vec2 min = center + scale * (sprite.min_px - sprite.anchor_px);
 	glm::vec2 max = center + scale * (sprite.max_px - sprite.anchor_px);
@@ -145,8 +151,9 @@ void DrawSprites::draw_text(std::string const &name, glm::vec2 const &at, float 
 	glm::vec2 moving_at = at;
 	for (size_t pos = 0; pos < name.size(); pos++){
 		Sprite const &chr = atlas.lookup(name.substr(pos,1));
-		draw(chr, moving_at, scale, color);
-		moving_at.x += (chr.max_px.x - chr.anchor_px.x) * scale;
+		float &&drift_y = chr.max_px.y - chr.anchor_px.y;
+		draw(chr, glm::vec2(moving_at.x, moving_at.y - drift_y * scale), scale, color);
+		moving_at.x += (chr.max_px.x - chr.anchor_px.x + text_space) * scale;
 	}
 }
 
@@ -158,7 +165,7 @@ void DrawSprites::get_text_extents(std::string const &name, glm::vec2 const &at,
 	for (size_t pos = 0; pos < name.size(); pos++){
 		Sprite const &chr = atlas.lookup(name.substr(pos,1));
 		glm::vec2 &&tmp = chr.max_px - chr.anchor_px;
-		right_most.x += tmp.x;
+		right_most.x += tmp.x + text_space;
 		right_most.y = tmp.y > right_most.y ? tmp.y : right_most.y;
 	}
 	*max = at + scale * right_most;

@@ -24,7 +24,12 @@ struct StoryMode : Mode {
 		Hill
 	} location = Dunes;
 	bool have_stone = false;
+	bool saw_man = false;
+	bool talked_with_man = false;
+	bool finished_question = false;
+	bool boasted_man = false;
 	bool added_stone = false;
+	int which_to_drink = 0;
 	struct {
 		bool first_visit = true;
 		bool wont_leave = false;
@@ -32,15 +37,20 @@ struct StoryMode : Mode {
 	struct {
 		bool first_visit = true;
 		bool took_stone = false;
+		bool saw_man = false;
+		bool talked_with_man = false;
+		bool finished_question = false;
+		bool boasted_man = false;
 	} oasis;
 	struct {
 		bool first_visit = true;
+		bool known_answer = false;
 		bool added_stone = false;
 	} hill;
 	
 	glm::vec2 view_min = glm::vec2(0,0);
 	glm::vec2 view_max = glm::vec2(256, 224);
 
-	float text_height = 11;
+	float text_height = 12;
 	float choice_height = text_height;
 };

@@ -22,26 +22,114 @@ Sprite const *sprite_hill_bg = nullptr;
 Sprite const *sprite_hill_traveller = nullptr;
 Sprite const *sprite_hill_missing = nullptr;
 
-Sprite const *text_dunes_landing = nullptr;
-Sprite const *text_dunes_return = nullptr;
-Sprite const *text_dunes_wont_leave = nullptr;
-Sprite const *text_dunes_do_leave = nullptr;
-Sprite const *text_dunes_do_walk_east = nullptr;
-Sprite const *text_dunes_do_walk_west = nullptr;
+const std::string text_dunes_landing = 
+	"My name is Tom. You may Call me\n"
+	"Major Tom. I lost contact with\n"
+	"Ground Control. But Somehow I \n"
+	"landed on the dark side of the Moon.\n"
+	"I can see Planet Earth is blue.";
+const std::string text_dunes_return = 
+	"Come back to where I landed. But\n"
+	"there is nothing I can do.";
 
-Sprite const *text_oasis_intro = nullptr;
-Sprite const *text_oasis_stone = nullptr;
-Sprite const *text_oasis_plain = nullptr;
-Sprite const *text_oasis_stone_taken = nullptr;
-Sprite const *text_oasis_do_take_stone = nullptr;
-Sprite const *text_oasis_do_return = nullptr;
+const std::string text_dunes_wont_leave = 
+	"But I have no where to go.";
+const std::string text_dunes_do_leave =
+	"Leave";
+const std::string text_dunes_do_walk_east = 
+	"Go down the Crater";
+const std::string text_dunes_do_walk_west = 
+	"Go up the Crater";
 
-Sprite const *text_hill_intro = nullptr;
-Sprite const *text_hill_inactive = nullptr;
-Sprite const *text_hill_active = nullptr;
-Sprite const *text_hill_stone_added = nullptr;
-Sprite const *text_hill_do_add_stone = nullptr;
-Sprite const *text_hill_do_return = nullptr;
+// ======================================
+const std::string text_oasis_intro = 
+	"I cannot believe there is water on the\n"
+	"Moon.";
+const std::string text_oasis_stone = 
+	"I see an Oil Lamp inside the bush.";
+const std::string text_oasis_plain = 
+	"I still feel strange to see water here.";
+const std::string text_oasis_end = 
+	"\"It's our FATE!\" the stupid Lamp\n"
+	"God shouted to me.";
+const std::string text_oasis_stone_taken = 
+	"I cannot picked up the Lamp. It's so\n"
+	"heavy, though it is only a small Lamp.\n"
+	"I wonder who would have lost it.";
+const std::string text_oasis_saw_man = 
+	"A strange man, or Lamp God, jumped\n"
+	"out of the Lamp. \"My name is Sane.\n"
+	"You must be Aladdin!\" Unfortunately,\n"
+	"I am not. \"Whatever,\" the man said,\n"
+	"\"I'm a Prophet. Answer one question\n"
+	"and I'll know all about yourself.\"";
+const std::string text_oasis_talked_with_man = 
+	"\"Hah, tell me, if You can choose,\n"
+	"which one will You choose to drink\n"
+	"at this exact moment? Orange juice,\n"
+	"cola, or beer?\"";
+const std::string text_oasis_chose_orange = 
+	"\"Hah, I have known all about You.\n"
+	"You are a man who likes orange!";
+const std::string text_oasis_chose_cola = 
+	"\"Hah, I have known all about You.\n"
+	"You are a man who likes cola!";
+const std::string text_oasis_chose_beer = 
+	"\"Hah, I have known all about You.\n"
+	"You are a man who likes beer!";
+const std::string text_oasis_sth_wrong = 
+	"\"Hah, I have known all about You.\n"
+	"You are a man who likes breaking\n"
+	"the rules!";
+const std::string text_oasis_finished_question = 
+	"Hah! Ain't I a great Prophet?\n"
+	"I'm such a genius hahaha!\"\n"
+	"Bollocks. What a stupid Lamp God.";
+const std::string text_oasis_boasted_man = 
+	"\"Hah, You are right! Tell You one\n"
+	"more thing. Our encounter is our\n"
+	"FATE! Remember the word, 'FATE'!\"";
+// -------
+const std::string text_oasis_do_take_stone = 
+	"Pick up the Lamp";
+const std::string text_oasis_do_return = 
+	"Return";
+
+const std::string text_oasis_do_rub_lamp = 
+	"Rub the Lamp";
+const std::string text_oasis_do_talk_with_man = 
+	"\"OK say your question\"";
+const std::string text_oasis_do_not_talk_with_man = 
+	"\"I take no interest\"";
+const std::string text_oasis_do_choose_orange = 
+	"\"Orange juice, of course\"";
+const std::string text_oasis_do_choose_cola = 
+	"\"I prefer cola\"";
+const std::string text_oasis_do_choose_beer = 
+	"\"I say beer\"";
+const std::string text_oasis_do_boast_man = 
+	"\"Oh You are definitely a genius\"";
+
+// ======================================
+const std::string text_hill_intro = 
+	"I see a strange stone on the hill.\n"
+	"There are words carved on it. Strange.\n"
+	"Who would have built this?";
+const std::string text_hill_inactive = 
+	"The stone says, \"Write the WORDS\".\n"
+	"There is a box carved under the words.";
+const std::string text_hill_active = 
+	"GOD. The stone turned an angle and\n"
+	"started to reflect Sun light towards\n"
+	"Planet Earth.";
+const std::string text_hill_stone_added = 
+	"I picked up a piece of hard rock and\n"
+	"tried to carve the word \"FATE\" in\n"
+	"the box.";
+const std::string text_hill_do_add_stone = 
+	"Carve \"FATE\"";
+const std::string text_hill_do_return = 
+	"Return";
 
 Load< SpriteAtlas > sprites(LoadTagDefault, []() -> SpriteAtlas const * {
 	SpriteAtlas const *ret = new SpriteAtlas(data_path("the-planet"));
@@ -60,27 +148,6 @@ Load< SpriteAtlas > sprites(LoadTagDefault, []() -> SpriteAtlas const * {
 	sprite_hill_bg = &ret->lookup("hill-bg");
 	sprite_hill_traveller = &ret->lookup("hill-traveller");
 	sprite_hill_missing = &ret->lookup("hill-missing");
-
-	text_dunes_landing = &ret->lookup("dunes-text-landing");
-	text_dunes_return = &ret->lookup("dunes-text-return");
-	text_dunes_wont_leave = &ret->lookup("dunes-text-won't-leave");
-	text_dunes_do_leave = &ret->lookup("dunes-text-do-leave");
-	text_dunes_do_walk_east = &ret->lookup("dunes-text-do-walk-east");
-	text_dunes_do_walk_west = &ret->lookup("dunes-text-do-walk-west");
-
-	text_oasis_intro = &ret->lookup("oasis-text-intro");
-	text_oasis_stone = &ret->lookup("oasis-text-stone");
-	text_oasis_plain = &ret->lookup("oasis-text-plain");
-	text_oasis_stone_taken = &ret->lookup("oasis-text-stone-taken");
-	text_oasis_do_take_stone = &ret->lookup("oasis-text-do-take-stone");
-	text_oasis_do_return = &ret->lookup("oasis-text-do-return");
-
-	text_hill_intro = &ret->lookup("hill-text-intro");
-	text_hill_inactive = &ret->lookup("hill-text-inactive");
-	text_hill_active = &ret->lookup("hill-text-active");
-	text_hill_stone_added = &ret->lookup("hill-text-stone-added");
-	text_hill_do_add_stone = &ret->lookup("hill-text-do-add-stone");
-	text_hill_do_return = &ret->lookup("hill-text-do-return");
 
 	return ret;
 });
@@ -109,38 +176,77 @@ void StoryMode::enter_scene() {
 	std::vector< MenuMode::Item > items;
 	glm::vec2 at(3.0f, view_max.y - 3.0f);
 	auto add_text = [&items,&at,this](std::string const &text) {
-		at.y -= text_height;
-		items.emplace_back(text, nullptr, 1.0f, nullptr, at);
-		at.y -= 4.0f;
+		std::string sep = "\n";
+		std::string token;
+		
+		// refer to https://stackoverflow.com/a/14267455
+		size_t start = 0U;
+		size_t end = text.find(sep);
+		while (end != std::string::npos)
+		{
+			token = text.substr(start, end - start);
+			items.emplace_back(token, nullptr, 1.0f, nullptr, at);
+			at.y -= choice_height;
+			at.y -= 4.0f;
+
+			start = end + sep.length();
+			end = text.find(sep, start);
+		}
+
+		if (start < text.length()) {
+			items.emplace_back(text.substr(start, text.length()), nullptr, 1.0f, nullptr, at);
+			at.y -= choice_height;
+			at.y -= 4.0f;
+		}
 	};
+
 	auto add_choice = [&items,&at,this](std::string const &text, std::function< void(MenuMode::Item const &) > const &fn) {
-		at.y -= choice_height;
-		items.emplace_back(text, nullptr, 1.0f, fn, at + glm::vec2(8.0f, 0.0f));
-		at.y -= 4.0f;
+		std::string sep = "\n";
+		std::string token;
+		
+		// refer to https://stackoverflow.com/a/14267455
+		size_t start = 0U;
+		size_t end = text.find(sep);
+		while (end != std::string::npos)
+		{
+			token = text.substr(start, end - start);
+			items.emplace_back(token, nullptr, 1.0f, fn, at + glm::vec2(8.0f, 0.0f));
+			at.y -= choice_height;
+			at.y -= 4.0f;
+
+			start = end + sep.length();
+			end = text.find(sep, start);
+		}
+
+		if (start < text.length()) {
+			items.emplace_back(text.substr(start, text.length()), nullptr, 1.0f, fn, at + glm::vec2(8.0f, 0.0f));
+			at.y -= choice_height;
+			at.y -= 4.0f;
+		}
 	};
 
 	if (location == Dunes) {
 		if (dunes.wont_leave) {
 			dunes.wont_leave = false;
-			add_text(text_dunes_wont_leave->name);
+			add_text(text_dunes_wont_leave);
 		}
 		if (dunes.first_visit) {
 			dunes.first_visit = false;
-			add_text(text_dunes_landing->name);
+			add_text(text_dunes_landing);
 		} else {
-			add_text(text_dunes_return->name);
+			add_text(text_dunes_return);
 		}
 		at.y -= 8.0f; //gap before choices
-		add_choice(text_dunes_do_walk_west->name, [this](MenuMode::Item const &){
+		add_choice(text_dunes_do_walk_west, [this](MenuMode::Item const &){
 			location = Hill;
 			Mode::set_current(shared_from_this());
 		});
-		add_choice(text_dunes_do_walk_east->name, [this](MenuMode::Item const &){
+		add_choice(text_dunes_do_walk_east, [this](MenuMode::Item const &){
 			location = Oasis;
 			Mode::set_current(shared_from_this());
 		});
 		if (!dunes.first_visit) {
-			add_choice(text_dunes_do_leave->name, [this](MenuMode::Item const &){
+			add_choice(text_dunes_do_leave, [this](MenuMode::Item const &){
 				if (added_stone) {
 					//TODO: some sort of victory animation?
 					Mode::set_current(nullptr);
@@ -153,53 +259,139 @@ void StoryMode::enter_scene() {
 	} else if (location == Oasis) {
 		if (oasis.took_stone) {
 			oasis.took_stone = false;
-			add_text(text_oasis_stone_taken->name);
+			add_text(text_oasis_stone_taken);
+		} else if (oasis.saw_man) {
+			oasis.saw_man = false;
+			add_text(text_oasis_saw_man);
+		} else if (oasis.talked_with_man) {
+			oasis.talked_with_man = false;
+			add_text(text_oasis_talked_with_man);
+		}else if (oasis.finished_question) {
+			oasis.finished_question = false;
+			switch (which_to_drink) {
+			case 1:
+				add_text(text_oasis_chose_orange);
+				break;
+			case 2:
+				add_text(text_oasis_chose_cola);
+				break;
+			case 3:
+				add_text(text_oasis_chose_beer);
+				break;
+			default:
+				add_text(text_oasis_sth_wrong);
+			}
+			add_text(text_oasis_finished_question);
+		} else if (oasis.boasted_man) {
+			oasis.boasted_man = false;
+			add_text(text_oasis_boasted_man);
 		}
+
 		if (oasis.first_visit) {
 			oasis.first_visit = false;
-			add_text(text_oasis_intro->name);
-		} else {
-			add_text(text_oasis_plain->name);
+			add_text(text_oasis_intro);
 		}
+
 		if (!have_stone) {
-			add_text(text_oasis_stone->name);
+			add_text(text_oasis_stone);
+		} else if (boasted_man) {
+			add_text(text_oasis_end);
+		} else {
+			add_text(text_oasis_plain);
 		}
 		at.y -= 8.0f; //gap before choices
 		if (!have_stone) {
-			add_choice(text_oasis_do_take_stone->name, [this](MenuMode::Item const &){
+			add_choice(text_oasis_do_take_stone, [this](MenuMode::Item const &){
 				have_stone = true;
 				oasis.took_stone = true;
 				Mode::set_current(shared_from_this());
 			});
+			add_choice(text_oasis_do_return, [this](MenuMode::Item const &){
+				location = Dunes;
+				Mode::set_current(shared_from_this());
+			});
+		} else if (!saw_man) {
+			add_choice(text_oasis_do_rub_lamp, [this](MenuMode::Item const &){
+				saw_man = true;
+				oasis.saw_man = true;
+				Mode::set_current(shared_from_this());
+			});
+			add_choice(text_oasis_do_return, [this](MenuMode::Item const &){
+				location = Dunes;
+				Mode::set_current(shared_from_this());
+			});
+		} else if (!talked_with_man) {
+			add_choice(text_oasis_do_talk_with_man, [this](MenuMode::Item const &){
+				talked_with_man = true;
+				oasis.talked_with_man = true;
+				Mode::set_current(shared_from_this());
+			});
+			add_choice(text_oasis_do_not_talk_with_man, [this](MenuMode::Item const &){
+				oasis.saw_man = true;
+				location = Dunes;
+				Mode::set_current(shared_from_this());
+			});
+		} else if (!finished_question) {
+			add_choice(text_oasis_do_choose_orange, [this](MenuMode::Item const &){
+				finished_question = true;
+				oasis.finished_question = true;
+				which_to_drink = 1;
+				Mode::set_current(shared_from_this());
+			});
+			add_choice(text_oasis_do_choose_cola, [this](MenuMode::Item const &){
+				finished_question = true;
+				oasis.finished_question = true;
+				which_to_drink = 2;
+				Mode::set_current(shared_from_this());
+			});
+			add_choice(text_oasis_do_choose_beer, [this](MenuMode::Item const &){
+				finished_question = true;
+				oasis.finished_question = true;
+				which_to_drink = 3;
+				Mode::set_current(shared_from_this());
+			});
+		} else if (!boasted_man) {
+			add_choice(text_oasis_do_boast_man, [this](MenuMode::Item const &){
+				boasted_man = true;
+				oasis.boasted_man = true;
+				Mode::set_current(shared_from_this());
+			});
+			add_choice(text_oasis_do_return, [this](MenuMode::Item const &){
+				oasis.finished_question = true;
+				location = Dunes;
+				Mode::set_current(shared_from_this());
+			});
+		} else {
+			add_choice(text_oasis_do_return, [this](MenuMode::Item const &){
+				location = Dunes;
+				Mode::set_current(shared_from_this());
+			});
 		}
-		add_choice(text_oasis_do_return->name, [this](MenuMode::Item const &){
-			location = Dunes;
-			Mode::set_current(shared_from_this());
-		});
 	} else if (location == Hill) {
 		if (hill.added_stone) {
 			hill.added_stone = false;
-			add_text(text_hill_stone_added->name);
+			add_text(text_hill_stone_added);
 		}
+
 		if (hill.first_visit) {
 			hill.first_visit = false;
-			add_text(text_hill_intro->name);
+			add_text(text_hill_intro);
 		} else {
 			if (added_stone) {
-				add_text(text_hill_active->name);
+				add_text(text_hill_active);
 			} else {
-				add_text(text_hill_inactive->name);
+				add_text(text_hill_inactive);
 			}
 		}
 		at.y -= 8.0f; //gap before choices
-		if (have_stone && !added_stone) {
-			add_choice(text_hill_do_add_stone->name, [this](MenuMode::Item const &){
+		if (boasted_man && !added_stone) {
+			add_choice(text_hill_do_add_stone, [this](MenuMode::Item const &){
 				added_stone = true;
 				hill.added_stone = true;
 				Mode::set_current(shared_from_this());
 			});
 		}
-		add_choice(text_hill_do_return->name, [this](MenuMode::Item const &){
+		add_choice(text_hill_do_return, [this](MenuMode::Item const &){
 			location = Dunes;
 			Mode::set_current(shared_from_this());
 		});
