@@ -15,12 +15,13 @@ Sprite const *sprite_dunes_traveller = nullptr;
 Sprite const *sprite_dunes_ship = nullptr;
 
 Sprite const *sprite_oasis_bg = nullptr;
+Sprite const *sprite_oasis_bg_man = nullptr;
 Sprite const *sprite_oasis_traveller = nullptr;
-Sprite const *sprite_oasis_missing = nullptr;
 
 Sprite const *sprite_hill_bg = nullptr;
 Sprite const *sprite_hill_traveller = nullptr;
-Sprite const *sprite_hill_missing = nullptr;
+Sprite const *sprite_hill_before = nullptr;
+Sprite const *sprite_hill_after = nullptr;
 
 const std::string text_dunes_landing = 
 	"My name is Tom. You may Call me\n"
@@ -29,13 +30,16 @@ const std::string text_dunes_landing =
 	"landed on the dark side of the Moon.\n"
 	"I can see Planet Earth is blue.";
 const std::string text_dunes_return = 
-	"Come back to where I landed. But\n"
-	"there is nothing I can do.";
+	"Come back to where I landed.\n"
+	"There is nothing I can do.";
 
 const std::string text_dunes_wont_leave = 
 	"But I have no where to go.";
+const std::string text_dunes_will_leave = 
+	"The mysterious light reflection...\n"
+	"What will happen next...?";
 const std::string text_dunes_do_leave =
-	"Leave";
+	". . .";
 const std::string text_dunes_do_walk_east = 
 	"Go down the Crater";
 const std::string text_dunes_do_walk_west = 
@@ -130,9 +134,18 @@ const std::string text_hill_do_add_stone =
 	"Carve \"FATE\"";
 const std::string text_hill_do_return = 
 	"Return";
+// ======================================
+const std::string text_main_title = 
+	"Dark Side of\nthe Moon";
+const std::string text_main_play_again = 
+	"Play again";
+const std::string text_main_play = 
+	"Play";
+const std::string text_main_exit = 
+	"Exit";
 
 Load< SpriteAtlas > sprites(LoadTagDefault, []() -> SpriteAtlas const * {
-	SpriteAtlas const *ret = new SpriteAtlas(data_path("the-planet"));
+	SpriteAtlas const *ret = new SpriteAtlas(data_path("darkside-of-moon"));
 
 	sprite_left_select = &ret->lookup("text-select-left");
 	sprite_right_select = &ret->lookup("text-select-right");
@@ -143,11 +156,12 @@ Load< SpriteAtlas > sprites(LoadTagDefault, []() -> SpriteAtlas const * {
 
 	sprite_oasis_bg = &ret->lookup("oasis-bg");
 	sprite_oasis_traveller = &ret->lookup("oasis-traveller");
-	sprite_oasis_missing = &ret->lookup("oasis-missing");
+	sprite_oasis_bg_man = &ret->lookup("oasis-bg-man");
 
 	sprite_hill_bg = &ret->lookup("hill-bg");
 	sprite_hill_traveller = &ret->lookup("hill-traveller");
-	sprite_hill_missing = &ret->lookup("hill-missing");
+	sprite_hill_before = &ret->lookup("hill-before");
+	sprite_hill_after = &ret->lookup("hill-after");
 
 	return ret;
 });
@@ -158,7 +172,7 @@ StoryMode::StoryMode() {
 StoryMode::~StoryMode() {
 }
 
-bool StoryMode::handle_event(SDL_Event const &, glm::uvec2 const &window_size) {
+bool StoryMode::handle_event(SDL_Event const &evt, glm::uvec2 const &window_size) {
 	if (Mode::current.get() != this) return false;
 
 	return false;
@@ -171,11 +185,37 @@ void StoryMode::update(float elapsed) {
 	}
 }
 
+void StoryMode::reset_conditions() {
+	have_stone = false;
+	saw_man = false;
+	talked_with_man = false;
+	finished_question = false;
+	boasted_man = false;
+	added_stone = false;
+	can_leave = false;
+	which_to_drink = 0;
+
+	dunes.first_visit = true;
+	dunes.wont_leave = false;
+	dunes.can_leave = false;
+	
+	oasis.first_visit = true;
+	oasis.took_stone = false;
+	oasis.saw_man = false;
+	oasis.talked_with_man = false;
+	oasis.finished_question = false;
+	oasis.boasted_man = false;
+
+	hill.first_visit = true;
+	hill.known_answer = false;
+	hill.added_stone = false;
+}
+
 void StoryMode::enter_scene() {
 	//just entered this scene, adjust flags and build menu as appropriate:
 	std::vector< MenuMode::Item > items;
 	glm::vec2 at(3.0f, view_max.y - 3.0f);
-	auto add_text = [&items,&at,this](std::string const &text) {
+	auto add_text = [&items,&at,this](std::string const &text, float scale=1.0f) {
 		std::string sep = "\n";
 		std::string token;
 		
@@ -185,22 +225,22 @@ void StoryMode::enter_scene() {
 		while (end != std::string::npos)
 		{
 			token = text.substr(start, end - start);
-			items.emplace_back(token, nullptr, 1.0f, nullptr, at);
-			at.y -= choice_height;
-			at.y -= 4.0f;
+			items.emplace_back(token, nullptr, scale, nullptr, at);
+			at.y -= choice_height * scale;
+			at.y -= 4.0f * scale;
 
 			start = end + sep.length();
 			end = text.find(sep, start);
 		}
 
 		if (start < text.length()) {
-			items.emplace_back(text.substr(start, text.length()), nullptr, 1.0f, nullptr, at);
-			at.y -= choice_height;
-			at.y -= 4.0f;
+			items.emplace_back(text.substr(start, text.length()), nullptr, scale, nullptr, at);
+			at.y -= choice_height * scale;
+			at.y -= 4.0f * scale;
 		}
 	};
 
-	auto add_choice = [&items,&at,this](std::string const &text, std::function< void(MenuMode::Item const &) > const &fn) {
+	auto add_choice = [&items,&at,this](std::string const &text, std::function< void(MenuMode::Item const &) > const &fn, float scale=1.0f) {
 		std::string sep = "\n";
 		std::string token;
 		
@@ -211,8 +251,8 @@ void StoryMode::enter_scene() {
 		{
 			token = text.substr(start, end - start);
 			items.emplace_back(token, nullptr, 1.0f, fn, at + glm::vec2(8.0f, 0.0f));
-			at.y -= choice_height;
-			at.y -= 4.0f;
+			at.y -= choice_height * scale;
+			at.y -= 4.0f * scale;
 
 			start = end + sep.length();
 			end = text.find(sep, start);
@@ -220,20 +260,42 @@ void StoryMode::enter_scene() {
 
 		if (start < text.length()) {
 			items.emplace_back(text.substr(start, text.length()), nullptr, 1.0f, fn, at + glm::vec2(8.0f, 0.0f));
-			at.y -= choice_height;
-			at.y -= 4.0f;
+			at.y -= choice_height * scale;
+			at.y -= 4.0f * scale;
 		}
 	};
 
-	if (location == Dunes) {
+	if (location == Main_memu) {
+		add_text(text_main_title, 3.0);
+
+		at.y -= 8.0f; //gap before choices
+		if (main_memu.again) {
+			add_choice(text_main_play_again, [this](MenuMode::Item const &){
+				reset_conditions();
+				location = Dunes;
+				Mode::set_current(shared_from_this());
+			});
+		} else {
+			add_choice(text_main_play, [this](MenuMode::Item const &){
+				location = Dunes;
+				Mode::set_current(shared_from_this());
+			});
+		}
+
+		add_choice(text_main_exit, [this](MenuMode::Item const &){
+			Mode::set_current(nullptr);
+		});
+	} else if (location == Dunes) {
 		if (dunes.wont_leave) {
 			dunes.wont_leave = false;
 			add_text(text_dunes_wont_leave);
+		} else if (added_stone) {
+			add_text(text_dunes_will_leave);
 		}
 		if (dunes.first_visit) {
 			dunes.first_visit = false;
 			add_text(text_dunes_landing);
-		} else {
+		} else if (!added_stone) {
 			add_text(text_dunes_return);
 		}
 		at.y -= 8.0f; //gap before choices
@@ -249,7 +311,9 @@ void StoryMode::enter_scene() {
 			add_choice(text_dunes_do_leave, [this](MenuMode::Item const &){
 				if (added_stone) {
 					//TODO: some sort of victory animation?
-					Mode::set_current(nullptr);
+					main_memu.again = true;
+					location = Main_memu;
+					Mode::set_current(shared_from_this());
 				} else {
 					dunes.wont_leave = true;
 					Mode::set_current(shared_from_this());
@@ -425,18 +489,23 @@ void StoryMode::draw(glm::uvec2 const &drawable_size) {
 			draw.draw(*sprite_dunes_ship, ul);
 			draw.draw(*sprite_dunes_traveller, ul);
 		} else if (location == Oasis) {
-			draw.draw(*sprite_oasis_bg, ul);
-			if (!have_stone) {
-				draw.draw(*sprite_oasis_missing, ul);
+			if (!saw_man) {
+				draw.draw(*sprite_oasis_bg, ul);
+			} else {
+				draw.draw(*sprite_oasis_bg_man, ul);
 			}
 			draw.draw(*sprite_oasis_traveller, ul);
 
 		} else if (location == Hill) {
 			draw.draw(*sprite_hill_bg, ul);
 			if (added_stone) {
-				draw.draw(*sprite_hill_missing, ul);
+				draw.draw(*sprite_hill_after, ul);
+			} else {
+				draw.draw(*sprite_hill_before, ul);
 			}
 			draw.draw(*sprite_hill_traveller, ul);
+		} else {
+			draw.draw(*sprite_dunes_bg, ul);
 		}
 	}
 	GL_ERRORS(); //did the DrawSprites do something wrong?

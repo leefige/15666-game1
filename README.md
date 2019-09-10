@@ -1,19 +1,20 @@
-# (TODO: your game's title)
+# The Dark Side of the Moon
 
-Author: (TODO: your name)
+Author: Yifei Li
 
-Design: (TODO: In two sentences or fewer, describe what is new and interesting about your game.)
+Design: Major Tom happened to land on the Moon, and met a ridiculous prophet who brought him even more mysteries.
 
-Screen Shot:
+Screen Shots:
 
-![Screen Shot](screenshot.png)
+![Screen Shot 1](screenshot-1.png)
+![Screen Shot 2](screenshot-2.png)
 
 How To Play:
 
-(TODO: describe the controls and (if needed) goals/strategy.)
+Use keyboard UP & DOWN to select different choices, and press ENTER to confirm selection.
 
 Art Sources:
 
-(TODO: fill in information about the sources of any artwork you used in the game that you did not draw.)
+Based on base art sources, I draw all other figures.
 
 This game was built with [NEST](NEST.md).

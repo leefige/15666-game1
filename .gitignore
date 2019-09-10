@@ -12,4 +12,5 @@ sprites/pack-sprites.pdb
 sprites/the-planet/
 
 .vscode/
-dist/*.png
+
+sprites/*/

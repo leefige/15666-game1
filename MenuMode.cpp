@@ -47,7 +47,7 @@ bool MenuMode::handle_event(SDL_Event const &evt, glm::uvec2 const &window_size)
 				items[selected].on_select(items[selected]);
 				return true;
 			}
-		}
+		} 
 	}
 	if (background) {
 		return background->handle_event(evt, window_size);
